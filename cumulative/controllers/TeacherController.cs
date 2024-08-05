@@ -1,40 +1,37 @@
-using cumalative.Models;
+﻿using Cumulative1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MySql.Data.MySqlClient;
 
-namespace cumalative.Controllers
+namespace Cumulative1.Controllers
 {
-    public class teacherController : Controller
+    public class TeacherController : Controller
     {
-        // GET: teacher
+        // GET: Teacher
         public ActionResult Index()
         {
             return View();
-
-
         }
 
-
-        //GET : /Author/List
+        //GET : /Teacher/List
         public ActionResult List()
         {
-            TeacherdataController controller = new TeacherdataController();
-            IEnumerable<Teacher> Teacher = controller.ListTeacher();
-            return View(Teacher);
+            TeacherDataController controller = new TeacherDataController();
+            IEnumerable<Teacher> Authors = controller.ListTeacher();
+            return View(Teachers);
         }
 
-        //GET : /Author/Show/{id}
+        //GET : /Teacher/Show/{id}
         public ActionResult Show(int id)
         {
-            TeacherdataController controller = new TeacherdataController();
-            Teacher NewTeacher = controller.Findteacher(id);
+            TeacherDataController controller = new TeacherDataController();
+            Teacher NewTeacher = controller.FindTeacher(id);
 
 
             return View(NewTeacher);
         }
-
     }
 }

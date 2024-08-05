@@ -1,34 +1,23 @@
-using cumalative.Models;
-using MySql.Data.MySqlClient;
-using Mysqlx.Datatypes;
+﻿using Cumulative1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MySql.Data.MySqlClient;
 
-namespace cumalative.Controllers
+namespace Cumulative1.Controllers
 {
-    public class TeacherdataController : ApiController
-    {
-        private SchoolDbContext school = new SchoolDbContext();
+    public class TeacherDataController : ApiController
+    {   
+        private SchoolDbContext School = new SchoolDbContext();
 
-        //This Controller Will access the authors table of our blog database.
-        /// <summary>
-        /// Returns a list of Authors in the system
-        /// </summary>
-        /// <example>GET api/AuthorData/ListAuthors</example>
-        /// <returns>
-        /// A list of authors (first names and last names)
-        /// </returns>
         [HttpGet]
         public IEnumerable<Teacher> ListTeacher()
         {
-            //Create an instance of a connection
-            MySqlConnection Conn = school.AccessDatabase();
+            MySqlConnection Conn = School.AccessDatabase();
 
-            //Open the connection between the web server and database
             Conn.Open();
 
             //Establish a new command (query) for our database
@@ -41,53 +30,52 @@ namespace cumalative.Controllers
             MySqlDataReader ResultSet = cmd.ExecuteReader();
 
             //Create an empty list of Authors
-            List<Teacher> Teacher = new List<Teacher> { };
+            List<Teacher> Teachers = new List<Teacher> { };
 
             //Loop Through Each Row the Result Set
             while (ResultSet.Read())
             {
                 //Access Column information by the DB column name as an index
-                int teacherId = (int)ResultSet["teacherid"];
-                string teacherFname = ResultSet["teacherfname"].ToString();
-                string teacherlname = ResultSet["teacherlname"].ToString();
-                string employeenumber = ResultSet["employeenumber"].ToString();
-                string hiredate = ResultSet["hiredate"].ToString();
-                string salary = ResultSet["salary"].ToString();
+                int Id = (int)ResultSet["teacherid"];
+                string TfName = ResultSet["teacherfname"].ToString();
+                string TlName = ResultSet["teacherlname"].ToString();
+                string Tnumber = ResultSet["employeenumber"].ToString();
+                DateTime Thiredate = Convert.ToDateTime(ResultSet["hiredate"]);
+                decimal Tsalary = Convert.ToDecimal(ResultSet["salary"]);
 
 
 
-                Teacher Newteacher = new Teacher();
-                Newteacher.teacherId = teacherId;
-                Newteacher.teacherFname = teacherFname;
-                Newteacher.teacherlname = teacherlname;
-                Newteacher.employeenumber = employeenumber;
-                Newteacher.hiredate = hiredate;
-                Newteacher.salary = salary;
+                Teacher NewTeacher = new Teacher();
+                NewTeacher.Id = Id;
+                NewTeacher.TfName = TfName;
+                NewTeacher.TlName = TlName;
+                NewTeacher.Tnumber = Tnumber;
+                NewTeacher.Thiredate = Thiredate;
+                NewTeacher.Tsalary = Tsalary;
 
                 //Add the Author Name to the List
-                Teacher.Add(Newteacher);
+                Teachers.Add(NewTeacher);
             }
 
             //Close the connection between the MySQL Database and the WebServer
             Conn.Close();
 
             //Return the final list of author names
-            return Teacher;
+            return Teachers;
         }
 
 
         /// <summary>
-        /// Finds an author in the system given an ID
+        /// search details of a teacher by id 
         /// </summary>
-        /// <param name="id">The author primary key</param>
-        /// <returns>An author object</returns>
+      
         [HttpGet]
-        public Teacher Findteacher(int id)
+        public Teacher FindTeacher(int id)
         {
-            Teacher Newteacher = new Teacher();
+            Teacher NewTeacher = new Teacher();
 
             //Create an instance of a connection
-            MySqlConnection Conn = school.AccessDatabase();
+            MySqlConnection Conn = School.AccessDatabase();
 
             //Open the connection between the web server and database
             Conn.Open();
@@ -104,24 +92,25 @@ namespace cumalative.Controllers
             while (ResultSet.Read())
             {
                 //Access Column information by the DB column name as an index
-                int teacherId = (int)ResultSet["teacherid"];
-                string teacherFname = ResultSet["teacherfname"].ToString();
-                string teacherlname = ResultSet["teacherlname"].ToString();
-                string employeenumber = ResultSet["employeenumber"].ToString();
-                string hiredate = ResultSet["hiredate"].ToString();
-                string salary = ResultSet["salary"].ToString();
+                int Id = (int)ResultSet["teacherid"];
+                string TfName = ResultSet["teacherfname"].ToString();
+                string TlName = ResultSet["teacherlname"].ToString();
+                string Tnumber = ResultSet["employeeteacher"].ToString();
+                DateTime Thiredate = Convert.ToDateTime(ResultSet["hiredate"]);
+                decimal Tsalary = Convert.ToDecimal(ResultSet["salary"]);
 
-                Teacher NewtTeacher = new Teacher();
-                Newteacher.teacherId = teacherId;
-                Newteacher.teacherFname = teacherFname;
-                Newteacher.teacherlname = teacherlname;
-                Newteacher.employeenumber = employeenumber;
-                Newteacher.hiredate = hiredate;
-                Newteacher.salary = salary;
+
+
+                NewTeacher.Id = Id;
+                NewTeacher.TfName = TfName;
+                NewTeacher.TlName = TlName;
+                NewTeacher.Tnumber = Tnumber;
+                NewTeacher.Thiredate = Thiredate;
+                NewTeacher.Tsalary = Tsalary;
             }
 
 
-            return Newteacher;
+            return NewTeacher;
         }
     }
 }
